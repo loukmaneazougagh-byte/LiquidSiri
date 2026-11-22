@@ -2,13 +2,13 @@ name: Build DEB
 on: [workflow_dispatch]
 jobs:
   build:
-    runs-on: ubuntu-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
       - name: Install Tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y git curl unzip build-essential fakeroot xz-utils clang
+          sudo apt-get install -y git curl unzip build-essential fakeroot xz-utils libtinfo5 libxml2
       - name: Setup Theos
         run: |
           H="https://"
@@ -17,9 +17,10 @@ jobs:
           curl -L "${H}${G}/theos/sdks/archive/refs/heads/master.zip" -o sdks.zip
           unzip -q sdks.zip
           mv sdks-master/*.sdk ~/theos/sdks/
-          curl -L "${H}${G}/sbingner/llvm-project/releases/download/v10.0.0-1/linux-ios-arm64e-clang-toolchain.tar.lzma" -o toolchain.tar.lzma
+          TOOL_URL=$(curl -s "https://api.${G}/repos/CRKatri/llvm-project/releases/latest" | grep "browser_download_url.*linux-x86_64.tar.zst" | cut -d '"' -f 4)
+          curl -L "$TOOL_URL" -o toolchain.tar.zst
           mkdir -p ~/theos/toolchain/linux/iphone
-          tar --lzma -xf toolchain.tar.lzma -C ~/theos/toolchain/linux/iphone --strip-components=1
+          tar --zstd -xf toolchain.tar.zst -C ~/theos/toolchain/linux/iphone --strip-components=1
       - name: Build DEB
         run: |
           export THEOS=~/theos
