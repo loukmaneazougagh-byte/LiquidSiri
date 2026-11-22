@@ -7,10 +7,7 @@ jobs:
       - uses: actions/checkout@v4
       - name: Setup Theos
         run: |
-          git clone --recursive https://github.com ~/theos
-          curl -LO https://github.com
-          unzip -q master.zip
-          mv sdks-master/*.sdk ~/theos/sdks/
+          bash -c "$(curl -fsSL https://githubusercontent.com)"
       - name: Build Package
         run: |
           export THEOS=~/theos
@@ -19,4 +16,3 @@ jobs:
         with:
           name: LiquidSiri-deb
           path: packages/*.deb
-        
