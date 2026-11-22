@@ -8,7 +8,7 @@ jobs:
       - name: Install Tools
         run: |
           sudo apt-get update
-          sudo apt-get install -y git curl unzip build-essential fakeroot ldid xz-utils clang
+          sudo apt-get install -y git curl unzip build-essential fakeroot xz-utils clang
       - name: Setup Theos
         run: |
           H="https://"
