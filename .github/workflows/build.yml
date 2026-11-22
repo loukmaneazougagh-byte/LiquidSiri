@@ -11,12 +11,13 @@ jobs:
           sudo apt-get install -y git curl unzip build-essential fakeroot
       - name: Setup Theos
         run: |
-          git config --global url."https://github.com".insteadOf "gh:"
-          git clone --recursive gh:theos/theos.git ~/theos
-          curl -L "https://github.com" -o sdks.zip
+          H="https://"
+          G="github.com"
+          git clone --recursive "${H}${G}/theos/theos.git" ~/theos
+          curl -L "${H}${G}/theos/sdks/archive/refs/heads/master.zip" -o sdks.zip
           unzip -q sdks.zip
           mv sdks-master/*.sdk ~/theos/sdks/
-          curl -L "https://github.comsbingner/llvm-project/releases/download/v10.0.0-1/linux-ios-arm64e-clang-toolchain.tar.lzma" -o toolchain.tar.lzma
+          curl -L "${H}${G}/sbingner/llvm-project/releases/download/v10.0.0-1/linux-ios-arm64e-clang-toolchain.tar.lzma" -o toolchain.tar.lzma
           mkdir -p ~/theos/toolchain/linux/iphone
           tar --lzma -xf toolchain.tar.lzma -C ~/theos/toolchain/linux/iphone --strip-components=1
       - name: Build Package
