@@ -2,12 +2,15 @@ name: Build DEB
 on: [workflow_dispatch]
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-14
     steps:
       - uses: actions/checkout@v4
       - name: Setup Theos
         run: |
-          bash -c "$(curl -fsSL https://githubusercontent.com)"
+          git clone --recursive https://github.com ~/theos
+          curl -L https://github.com -o sdks.zip
+          unzip -q sdks.zip
+          mv sdks-master/*.sdk ~/theos/sdks/
       - name: Build Package
         run: |
           export THEOS=~/theos
