@@ -7,8 +7,9 @@ jobs:
       - uses: actions/checkout@v4
       - name: Setup Theos
         run: |
-          git clone --recursive https://github.com ~/theos
-          curl -L https://github.com -o sdks.zip
+          git config --global url."https://github.com".insteadOf "gh:"
+          git clone --recursive gh:theos/theos.git ~/theos
+          curl -L "https://github.com" -o sdks.zip
           unzip -q sdks.zip
           mv sdks-master/*.sdk ~/theos/sdks/
       - name: Build Package
