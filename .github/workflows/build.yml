@@ -2,9 +2,13 @@ name: Build DEB
 on: [workflow_dispatch]
 jobs:
   build:
-    runs-on: macos-15
+    runs-on: macos-13
     steps:
       - uses: actions/checkout@v4
+      - name: Install Dependencies
+        run: |
+          brew install ldid fakeroot
+          sudo xcode-select -s /Applications/Xcode.app/Contents/Developer
       - name: Setup Theos
         run: |
           H="https://"
@@ -16,6 +20,7 @@ jobs:
       - name: Build Package
         run: |
           export THEOS=~/theos
+          make clean
           make package FINALPACKAGE=1 THEOS_PACKAGE_SCHEME=rootless
       - uses: actions/upload-artifact@v4
         with:
