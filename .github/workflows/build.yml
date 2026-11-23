@@ -14,14 +14,15 @@ jobs:
         with:
           repository: theos/sdks
           path: sdks
-      - name: Setup Theos & ldid
+      - uses: actions/checkout@v4
+        with:
+          repository: ProcursusTeam/ldid
+          path: ldid_src
+      - name: Setup Theos & Build ldid
         run: |
           mv theos ~/theos
           mv sdks/*.sdk ~/theos/sdks/
-          H="https://"
-          G="github.com"
-          curl -sL "${H}${G}/ProcursusTeam/ldid/releases/latest/download/ldid_macos_x86_64" -o ~/theos/bin/ldid
-          chmod +x ~/theos/bin/ldid
+          cd ldid_src && make && cp ldid ~/theos/bin/ldid
       - name: Build DEB
         run: |
           export THEOS=~/theos
