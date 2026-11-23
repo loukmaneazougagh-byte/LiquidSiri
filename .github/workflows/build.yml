@@ -11,11 +11,8 @@ jobs:
           sudo apt-get install -y git curl unzip build-essential fakeroot xz-utils zstd libtinfo5 libxml2-dev
       - name: Setup Theos
         run: |
-          H="https://"
-          G="://githubusercontent.com"
-          curl -fsSL "${H}${G}/theos/theos/master/bin/install-theos" -o install.sh
-          chmod +x install.sh
-          printf "1\n1\n1\n" | ./install.sh
+          git clone --recursive https://github.com ~/theos
+          printf "1\n1\n1\n" | ~/theos/bin/install-theos
       - name: Build DEB
         run: |
           export THEOS=~/theos
@@ -24,3 +21,4 @@ jobs:
         with:
           name: LiquidSiri-deb
           path: packages/*.deb
+
