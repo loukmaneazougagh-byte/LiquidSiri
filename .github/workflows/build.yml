@@ -2,7 +2,7 @@ name: Build DEB
 on: [workflow_dispatch]
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: macos-15-intel
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
@@ -18,7 +18,10 @@ jobs:
         run: |
           mv theos ~/theos
           mv sdks/*.sdk ~/theos/sdks/
-          printf "1\n1\n" | bash ~/theos/bin/install-theos
+          H="https://"
+          G="github.com"
+          curl -sL "${H}${G}/ProcursusTeam/ldid/releases/latest/download/ldid_macos_x86_64" -o ~/theos/bin/ldid
+          chmod +x ~/theos/bin/ldid
       - name: Build DEB
         run: |
           export THEOS=~/theos
