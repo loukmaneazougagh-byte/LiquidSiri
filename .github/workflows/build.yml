@@ -17,7 +17,7 @@ jobs:
       - name: Setup Theos
         run: |
           mv theos ~/theos
-          printf "1\n1\n1\n" | ~/theos/bin/install-theos
+          printf "1\n1\n1\n" | bash ~/theos/bin/install-theos
       - name: Build DEB
         run: |
           export THEOS=~/theos
