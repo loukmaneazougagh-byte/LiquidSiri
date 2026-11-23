@@ -12,16 +12,10 @@ jobs:
       - name: Setup Theos
         run: |
           H="https://"
-          G="github.com"
-          git clone --recursive "${H}${G}/theos/theos.git" ~/theos
-          curl -L "${H}${G}/theos/sdks/archive/refs/heads/master.zip" -o sdks.zip
-          unzip -q sdks.zip
-          mv sdks-master/*.sdk ~/theos/sdks/
-          curl -L "${H}${G}/kabiroberai/swift-toolchain-linux/releases/download/v2.3.1/swift-5.8-ubuntu22.04.tar.xz" -o toolchain.tar.xz
-          mkdir -p ~/theos/toolchain/linux/iphone
-          tar -xf toolchain.tar.xz -C ~/theos/toolchain/linux/iphone --strip-components=1
-          curl -L "${H}${G}/ProcursusTeam/ldid/releases/latest/download/ldid_linux_x86_64" -o ~/theos/bin/ldid
-          chmod +x ~/theos/bin/ldid
+          G="://githubusercontent.com"
+          curl -fsSL "${H}${G}/theos/theos/master/bin/install-theos" -o install.sh
+          chmod +x install.sh
+          printf "1\n1\n1\n" | ./install.sh
       - name: Build DEB
         run: |
           export THEOS=~/theos
