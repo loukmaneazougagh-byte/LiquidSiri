@@ -2,10 +2,14 @@ name: Build DEB
 on: [workflow_dispatch]
 jobs:
   build:
-    runs-on: macos-latest
+    runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
-      - name: Setup Theos & ldid
+      - name: Install Dependencies
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y git curl unzip build-essential fakeroot xz-utils zstd libtinfo5 libxml2-dev
+      - name: Setup Theos
         run: |
           H="https://"
           G="github.com"
@@ -13,7 +17,11 @@ jobs:
           curl -L "${H}${G}/theos/sdks/archive/refs/heads/master.zip" -o sdks.zip
           unzip -q sdks.zip
           mv sdks-master/*.sdk ~/theos/sdks/
-          curl -L "${H}${G}/ProcursusTeam/ldid/releases/latest/download/ldid_macos_x86_64" -o ~/theos/bin/ldid || curl -L "${H}${G}/ProcursusTeam/ldid/releases/latest/download/ldid_macos_arm64" -o ~/theos/bin/ldid
+          TOOL_URL=$(curl -s "https://api.${G}/repos/CRKatri/llvm-project/releases/latest" | grep "browser_download_url.*linux-x86_64.tar.zst" | cut -d '"' -f 4)
+          curl -L "$TOOL_URL" -o toolchain.tar.zst
+          mkdir -p ~/theos/toolchain/linux/iphone
+          tar --zstd -xf toolchain.tar.zst -C ~/theos/toolchain/linux/iphone --strip-components=1
+          curl -L "${H}${G}/ProcursusTeam/ldid/releases/latest/download/ldid_linux_x86_64" -o ~/theos/bin/ldid
           chmod +x ~/theos/bin/ldid
       - name: Build DEB
         run: |
