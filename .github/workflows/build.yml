@@ -2,7 +2,7 @@ name: Build DEB
 on: [workflow_dispatch]
 jobs:
   build:
-    runs-on: ubuntu-22.04
+    runs-on: macos-latest
     steps:
       - uses: actions/checkout@v4
       - uses: actions/checkout@v4
@@ -10,14 +10,15 @@ jobs:
           repository: theos/theos
           submodules: recursive
           path: theos
-      - name: Install Dependencies
-        run: |
-          sudo apt-get update
-          sudo apt-get install -y git curl unzip build-essential fakeroot xz-utils zstd libtinfo5 libxml2-dev
-      - name: Setup Theos
+      - uses: actions/checkout@v4
+        with:
+          repository: theos/sdks
+          path: sdks
+      - name: Setup Theos & ldid
         run: |
           mv theos ~/theos
-          printf "1\n1\n1\n" | bash ~/theos/bin/install-theos
+          mv sdks/*.sdk ~/theos/sdks/
+          printf "1\n1\n" | bash ~/theos/bin/install-theos
       - name: Build DEB
         run: |
           export THEOS=~/theos
