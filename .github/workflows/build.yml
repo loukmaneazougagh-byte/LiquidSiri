@@ -20,6 +20,7 @@ jobs:
           path: ldid_src
       - name: Setup Theos & Build ldid
         run: |
+          HOMEBREW_NO_AUTO_UPDATE=1 brew install libplist
           mv theos ~/theos
           mv sdks/*.sdk ~/theos/sdks/
           cd ldid_src && make && cp ldid ~/theos/bin/ldid
