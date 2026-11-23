@@ -5,13 +5,18 @@ jobs:
     runs-on: ubuntu-22.04
     steps:
       - uses: actions/checkout@v4
+      - uses: actions/checkout@v4
+        with:
+          repository: theos/theos
+          submodules: recursive
+          path: theos
       - name: Install Dependencies
         run: |
           sudo apt-get update
           sudo apt-get install -y git curl unzip build-essential fakeroot xz-utils zstd libtinfo5 libxml2-dev
       - name: Setup Theos
         run: |
-          git clone --recursive https://github.com ~/theos
+          mv theos ~/theos
           printf "1\n1\n1\n" | ~/theos/bin/install-theos
       - name: Build DEB
         run: |
@@ -21,4 +26,3 @@ jobs:
         with:
           name: LiquidSiri-deb
           path: packages/*.deb
-
