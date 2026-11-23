@@ -17,10 +17,9 @@ jobs:
           curl -L "${H}${G}/theos/sdks/archive/refs/heads/master.zip" -o sdks.zip
           unzip -q sdks.zip
           mv sdks-master/*.sdk ~/theos/sdks/
-          TOOL_URL=$(curl -s "https://api.${G}/repos/CRKatri/llvm-project/releases/latest" | grep "browser_download_url.*linux-x86_64.tar.zst" | cut -d '"' -f 4)
-          curl -L "$TOOL_URL" -o toolchain.tar.zst
+          curl -L "${H}${G}/kabiroberai/swift-toolchain-linux/releases/download/v2.3.1/swift-5.8-ubuntu22.04.tar.xz" -o toolchain.tar.xz
           mkdir -p ~/theos/toolchain/linux/iphone
-          tar --zstd -xf toolchain.tar.zst -C ~/theos/toolchain/linux/iphone --strip-components=1
+          tar -xf toolchain.tar.xz -C ~/theos/toolchain/linux/iphone --strip-components=1
           curl -L "${H}${G}/ProcursusTeam/ldid/releases/latest/download/ldid_linux_x86_64" -o ~/theos/bin/ldid
           chmod +x ~/theos/bin/ldid
       - name: Build DEB
